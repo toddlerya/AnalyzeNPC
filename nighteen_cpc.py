@@ -3,8 +3,9 @@
 # author: toddler
 
 import jieba
-from collections import Counter
 import re
+import os
+from collections import Counter
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
@@ -35,7 +36,7 @@ def cut_analyze(input_file):
         goal_word = ''.join(re.findall(u'[\u4e00-\u9fa5]+', seg)).strip()  # 过滤所有非中文字符内容
         if len(goal_word) != 0 and not stop_words.__contains__(goal_word):  # 过滤分词结果中的停词内容
             # filter_seg_list.append(goal_word.encode('utf-8'))  # 将unicode的文本转为utf-8保存到列表以备后续处理
-            filter_seg_list.append(goal_word)  # 将unicode的文本转为utf-8保存到列表以备后续处理
+            filter_seg_list.append(goal_word)
 
     seg_counter_all = Counter(filter_seg_list).most_common()  # 对切词结果按照词频排序
 
@@ -48,7 +49,7 @@ def cut_analyze(input_file):
 def main():
     input_file_path = u'input_file/nighteen-cpc.txt'
     cut_data, sort_data = cut_analyze(input_file=input_file_path)
-    font = r'E:\Codes\National_Congress_of_ CPC\assets\msyh.ttf'
+    font = os.path.abspath('assets/msyh.ttf')
     wc = WordCloud(collocations=False, font_path=font, width=3600, height=3600, margin=2)
     wc.generate_from_frequencies(dict(sort_data))
     plt.figure()
